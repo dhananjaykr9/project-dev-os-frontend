@@ -12,29 +12,38 @@ export default function ProjectCard({ project }: { project: Project }) {
       viewport={{ once: true }}
       className="group relative flex flex-col w-full h-full bg-[#0D0D0D] rounded-[2.5rem] p-8 lg:p-10 transition-all duration-500 border border-white/10 hover:border-emerald-500/50 overflow-hidden shadow-2xl"
     >
-      {/* Visual Scanning Effect on Hover */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-10 transition-opacity duration-500">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+      {/* UPDATED: Optimized Scanning Effect */}
+      <div className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+        {/* Background Grid - Increased opacity for visibility */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#10b9810a_1px,transparent_1px),linear-gradient(to_bottom,#10b9810a_1px,transparent_1px)] bg-[size:24px_24px]" />
+        
+        {/* Scanning Line - Switched from 'top' to 'y' for GPU acceleration */}
         <motion.div 
-          animate={{ top: ["-10%", "110%"] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-x-0 h-[2px] bg-emerald-500 shadow-[0_0_15px_#10b981]"
+          initial={{ y: "-100%" }}
+          animate={{ y: "1000%" }} // Adjusted to cover full height based on container
+          transition={{ 
+            duration: 3, 
+            repeat: Infinity, 
+            ease: "linear" 
+          }}
+          style={{ translateZ: 0 }} // Forces GPU rendering on Vercel
+          className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent shadow-[0_0_15px_#10b981]"
         />
       </div>
 
-      <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] group-hover:bg-emerald-500/20 transition-all duration-700 pointer-events-none" />
+      {/* Background Glow */}
+      <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] group-hover:bg-emerald-500/20 transition-all duration-700 pointer-events-none z-0" />
 
-      <div className="relative z-10 flex flex-col h-full">
+      <div className="relative z-20 flex flex-col h-full">
         {/* Header Section */}
         <div className="flex justify-between items-start mb-10">
           <div className="flex gap-3">
             <div className="p-3 bg-white/5 rounded-2xl text-emerald-400 border border-white/10 group-hover:bg-emerald-500 group-hover:text-black transition-all duration-300">
               <Cpu size={24} />
             </div>
-            {/* Quick External Links */}
             <div className="flex flex-col gap-1.5 pt-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
-              <a href="#" className="text-slate-500 hover:text-emerald-400 transition-colors" title="GitHub Source"><Github size={14} /></a>
-              <a href="#" className="text-slate-500 hover:text-emerald-400 transition-colors" title="Live Demo"><Globe size={14} /></a>
+              <a href="#" className="text-slate-500 hover:text-emerald-400 transition-colors"><Github size={14} /></a>
+              <a href="#" className="text-slate-500 hover:text-emerald-400 transition-colors"><Globe size={14} /></a>
             </div>
           </div>
           <div className="flex flex-col items-end gap-1">
@@ -54,7 +63,6 @@ export default function ProjectCard({ project }: { project: Project }) {
             {project.description}
           </p>
 
-          {/* Tech Stack - Plain Pills */}
           <div className="flex flex-wrap gap-2 pt-4">
             {project.techStack.map(tech => (
               <span key={tech} className="px-3 py-1.5 rounded-lg bg-white/10 border border-white/10 text-[10px] font-mono text-emerald-100 uppercase tracking-widest">
