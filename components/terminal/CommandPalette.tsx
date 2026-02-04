@@ -1,17 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, FileText, Terminal, Mail, Github, ChevronRight, Activity } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
-  const router = useRouter();
 
-  // Defined handlers for each command to make it functional
+  // Defined handlers to make the commands functional
   const actions = useMemo(() => [
     { 
       icon: <FileText size={18} />, 
@@ -50,6 +48,7 @@ export default function CommandPalette() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Toggle palette with CMD+K or CTRL+K
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
         setIsOpen(prev => !prev);
@@ -80,12 +79,14 @@ export default function CommandPalette() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, filtered, activeIndex]);
 
+  // Reset selection when search changes
   useEffect(() => { setActiveIndex(0); }, [query]);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
+          {/* Backdrop Blur Layer */}
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
@@ -94,6 +95,7 @@ export default function CommandPalette() {
             className="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-[100]"
           />
 
+          {/* Palette Container */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -117,7 +119,7 @@ export default function CommandPalette() {
               </div>
             </div>
 
-            <div className="p-3 max-h-[380px] overflow-y-auto custom-scrollbar">
+            <div className="p-3 max-h-[380px] overflow-y-auto">
               {filtered.map((action, idx) => (
                 <button 
                   key={action.label}

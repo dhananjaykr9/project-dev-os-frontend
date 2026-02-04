@@ -47,7 +47,7 @@ export default function Home() {
       {/* System Status Footer */}
       <footer className="py-20 text-center border-t border-white/5 opacity-30">
         <p className="font-mono text-[10px] tracking-[0.5em] text-slate-500 uppercase">
-          SYSTEM_STABLE // NO_ERRORS_DETECTED // 2026
+          DHANANJAY KHARKAR // 2026
         </p>
       </footer>
     </main>

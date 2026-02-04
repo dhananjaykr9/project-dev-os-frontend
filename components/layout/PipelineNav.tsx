@@ -1,10 +1,8 @@
 "use client";
 
 import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 
-// 1. Move the stages array OUTSIDE the component
-// This ensures the reference never changes between renders
 const STAGES = [
   { id: "hero", label: "01_SOURCE", sub: "SYSTEM_START" },
   { id: "projects", label: "02_TRANSFORM", sub: "ENGINE_REGISTRY" },
@@ -14,18 +12,61 @@ const STAGES = [
 ];
 
 export default function PipelineNav() {
-  const { scrollYProgress } = useScroll();
+  const [mounted, setMounted] = useState(false);
   const [activeStage, setActiveStage] = useState("hero");
+  const { scrollYProgress } = useScroll();
+  const prevStageRef = useRef("hero"); // Ref to track actual changes
   
-  const translateY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-  const movingDotY = useSpring(translateY, { stiffness: 100, damping: 30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
+  const movingDotY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const smoothDotY = useSpring(movingDotY, { stiffness: 80, damping: 20 });
+
+  const [percent, setPercent] = useState(0);
+
+  // 1. Improved Audio Context Handler
+  const playSectionBeep = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const audioCtx = new AudioCtx();
+      
+      // Browser safety: Resume context if suspended
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.type = "sine"; 
+      oscillator.frequency.setValueAtTime(900, audioCtx.currentTime); 
+      
+      gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); 
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.08);
+    } catch (e) {
+      // Silently fail if browser blocks audio
+    }
+  };
+
+  const packets = useMemo(() => Array.from({ length: 3 }), []);
+
+  // 2. Controlled Sound Trigger
+  useEffect(() => {
+    if (mounted && activeStage !== prevStageRef.current) {
+      playSectionBeep();
+      prevStageRef.current = activeStage;
+    }
+  }, [activeStage, mounted]);
 
   useEffect(() => {
+    setMounted(true);
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -20% 0px",
-      threshold: 0.1, 
+      rootMargin: "-48% 0px -48% 0px", // Tightened margin for precise center detection
+      threshold: 0, 
     };
 
     const handleIntersect = (entries: IntersectionObserverEntry[]) => {
@@ -37,91 +78,126 @@ export default function PipelineNav() {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    
-    // 2. Use the constant STAGES here
-    STAGES.forEach((stage) => {
-      const el = document.getElementById(stage.id);
+    STAGES.forEach((s) => {
+      const el = document.getElementById(s.id);
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
-  }, []); // 3. Keep the dependency array empty (or remove STAGES)
+    const unsubscribe = scrollYProgress.on("change", (v) => setPercent(Math.round(v * 100)));
+    return () => {
+      observer.disconnect();
+      unsubscribe();
+    };
+  }, [scrollYProgress]);
 
-  const scrollTo = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
+  if (!mounted) return null;
 
   return (
-    <nav className="fixed left-6 md:left-10 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-start gap-12 z-50">
-      
-      {/* The Main Track */}
-      <div className="absolute left-[3px] top-0 w-[2px] h-full bg-white/5 -z-10 rounded-full">
+    <nav className="fixed left-6 md:left-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-start gap-12 z-[100] font-mono">
+      {/* Header: Live Status Terminal */}
+      <div className="absolute -top-20 left-0 space-y-1">
+        <div className="flex items-center gap-2">
+          <span className="text-[7px] text-emerald-500/40 uppercase tracking-widest">Pipeline_Monitor</span>
+          <div className="w-1 h-1 bg-emerald-500 rounded-full animate-ping" />
+        </div>
+        <div className="text-[10px] text-white font-black tracking-tighter bg-emerald-500/10 px-2 py-0.5 border-l-2 border-emerald-500">
+          {percent.toString().padStart(3, '0')}%_SYNCED
+        </div>
+      </div>
+
+      {/* The Main Pipeline Track */}
+      <div className="absolute left-[3px] top-0 w-[1px] h-full bg-white/5 -z-10 overflow-visible">
         <motion.div
-          className="w-full bg-gradient-to-b from-violet-600 via-emerald-400 to-cyan-500 origin-top"
-          style={{ scaleY, boxShadow: "0 0 15px rgba(16, 185, 129, 0.3)" }}
+          className="w-full bg-gradient-to-b from-emerald-400 via-cyan-400 to-violet-500 origin-top h-full shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+          style={{ scaleY }}
         />
 
-        <motion.div 
-          style={{ top: movingDotY }}
-          className="absolute left-1/2 -translate-x-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] z-20"
-        >
-          <div className="absolute inset-0 bg-emerald-400 animate-ping rounded-full" />
+        {packets.map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ top: "-10%" }}
+            animate={{ top: "110%" }}
+            transition={{ duration: 3 + i, repeat: Infinity, ease: "linear", delay: i * 1.5 }}
+            className="absolute left-1/2 -translate-x-1/2 w-[3px] h-4 bg-emerald-500/20 blur-[1px]"
+          />
+        ))}
+
+        <motion.div style={{ top: smoothDotY }} className="absolute left-1/2 -translate-x-1/2 w-4 h-4 z-20">
+          <div className="absolute inset-0 bg-white rounded-full shadow-[0_0_15px_#fff] scale-50" />
+          <div className="absolute inset-0 bg-emerald-400 animate-ping rounded-full opacity-30 scale-150" />
         </motion.div>
       </div>
 
-      {/* 4. Use the constant STAGES here for rendering */}
-      {STAGES.map((stage) => {
+      {/* Navigation Stages */}
+      {STAGES.map((stage, index) => {
         const isActive = activeStage === stage.id;
 
         return (
-          <button
+          <motion.button
             key={stage.id}
-            onClick={() => scrollTo(stage.id)}
-            className="group relative flex items-center gap-6 outline-none text-left"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            onClick={() => {
+              // Clicking also triggers the beep naturally through state update
+              document.getElementById(stage.id)?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="group relative flex items-center gap-8 outline-none text-left"
           >
             <div className="relative flex items-center justify-center">
               <AnimatePresence>
                 {isActive && (
                   <motion.div 
-                    layoutId="active-ring"
-                    className="absolute w-6 h-6 rounded-full border border-emerald-500/30 bg-emerald-500/5"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    layoutId="active-nav-ring"
+                    className="absolute w-8 h-8 rounded-full border border-emerald-500/10 bg-emerald-500/[0.03]"
+                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
                   />
                 )}
               </AnimatePresence>
 
-              <div className={`relative w-2 h-2 rounded-full transition-all duration-500 border-2 ${
+              <div className={`relative w-2 h-2 transition-all duration-500 ${
                 isActive 
-                ? "bg-emerald-400 border-emerald-200 shadow-[0_0_12px_#10b981]" 
-                : "bg-slate-950 border-white/10 group-hover:border-white/40"
+                ? "bg-white rotate-45 scale-125 shadow-[0_0_10px_#fff]" 
+                : "bg-slate-900 border border-white/20 group-hover:border-emerald-500/50"
               }`} />
             </div>
 
             <div className="flex flex-col">
-              <span className={`text-[10px] font-mono tracking-[0.4em] transition-all duration-500 flex items-center gap-3 ${
-                isActive ? "text-white translate-x-2" : "text-slate-500 group-hover:text-slate-300"
+              <span className={`text-[9px] tracking-[0.4em] transition-all duration-500 ${
+                isActive ? "text-emerald-400 font-bold translate-x-1" : "text-slate-500 group-hover:text-slate-300"
               }`}>
                 {stage.label}
+              </span>
+              
+              <AnimatePresence mode="wait">
                 {isActive && (
                   <motion.span 
-                    animate={{ opacity: [1, 0] }} 
-                    transition={{ repeat: Infinity, duration: 1 }} 
-                    className="w-1 h-3 bg-emerald-400 shadow-[0_0_8px_#10b981]" 
-                  />
+                    initial={{ opacity: 0, y: 2 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -2 }}
+                    className="text-[7px] text-slate-500 uppercase tracking-widest mt-0.5"
+                  >
+                    {stage.sub}
+                  </motion.span>
                 )}
-              </span>
-              <span className={`text-[8px] font-mono transition-all duration-700 uppercase tracking-widest ${
-                isActive ? "text-emerald-500/80 opacity-100 translate-x-2" : "text-slate-700 opacity-0"
-              }`}>
-                {stage.sub}
-              </span>
+              </AnimatePresence>
             </div>
-          </button>
+          </motion.button>
         );
       })}
+
+      {/* Footer: Live Coordinates */}
+      <div className="absolute -bottom-24 left-0 space-y-1 opacity-40">
+        <div className="text-[7px] text-slate-600 uppercase flex justify-between gap-4">
+          <span>X_ADDR</span>
+          <span className="text-emerald-500 font-mono">0x{percent.toString(16).padStart(2, '0')}</span>
+        </div>
+        <div className="text-[7px] text-slate-600 uppercase flex justify-between gap-4">
+          <span>Y_ADDR</span>
+          <span className="text-emerald-500 font-mono">0x{(percent * 2).toString(16).padStart(2, '0')}</span>
+        </div>
+        <div className="w-16 h-[1px] bg-white/5" />
+      </div>
     </nav>
   );
 }

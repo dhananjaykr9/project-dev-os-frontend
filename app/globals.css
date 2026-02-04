@@ -7,25 +7,56 @@
   --color-matrix-green: #10b981;
 }
 
-body {
-  background-color: #030712;
-  color: #94a3b8;
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
+/* Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Prevents layout shift when scrollbar appears */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: #030712;
+    color: #94a3b8;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+    /* Prevents pull-to-refresh on mobile which can break fixed overlays */
+    overscroll-behavior-y: none; 
+  }
 }
 
-/* Glassmorphism utility */
-.glass {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Custom Scrollbar for Terminal aesthetic */
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 10px;
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
-.text-gradient {
-  background: linear-gradient(to right, #fff, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+/* Optimized Glitch Animation */
 @keyframes glitch {
   0% { transform: translate(0); text-shadow: none; }
   20% { transform: translate(-2px, 1px); text-shadow: 2px 0 #10b981, -2px 0 #8b5cf6; }
@@ -36,5 +67,13 @@ body {
 }
 
 .animate-recompile {
+  /* will-change improves performance on Vercel/Production */
+  will-change: transform, text-shadow;
   animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+/* Selection highlight matches your theme */
+::selection {
+  background: rgba(16, 185, 129, 0.2);
+  color: #fff;
 }

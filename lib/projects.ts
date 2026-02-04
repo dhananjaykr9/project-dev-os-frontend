@@ -12,7 +12,9 @@ export interface Project {
   id: string;
   title: string;
   category: SystemRole;
-  emoji: string; // Added for visual indexing
+  emoji: string;
+  github: string; // Required for the GitHub icon link
+  demo: string;   // Required for the Globe icon link
   specs: {
     status: ProjectStatus;
     latency?: string;
@@ -20,7 +22,7 @@ export interface Project {
   };
   description: string;
   techStack: string[];
-  architecture: string; // Mermaid logic string
+  architecture: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -29,6 +31,8 @@ export const PROJECTS: Project[] = [
     title: "SmartFlow",
     category: "DATA_ENGINEER",
     emoji: "🌊",
+    github: "https://github.com/dhananjaykr9/SmartFlow", // Add your actual link
+    demo: "https://smartflow-demo.com",                // Add your actual link
     specs: {
       status: "v1.5 PRODUCTION",
       engine: "ISOLATION_FOREST",
@@ -51,6 +55,8 @@ export const PROJECTS: Project[] = [
     title: "MetricMind",
     category: "ML_ENGINEER",
     emoji: "🧠",
+    github: "https://github.com/dhananjaykr9/MetricMind",
+    demo: "https://metricmind.app",
     specs: {
       status: "TDD_STABLE",
       engine: "RANDOM_FOREST",
@@ -72,6 +78,8 @@ export const PROJECTS: Project[] = [
     title: "DocuMinr",
     category: "AI_ENGINEER",
     emoji: "⛏️",
+    github: "https://github.com/dhananjaykr9/DocuMinr",
+    demo: "https://documinr.ai",
     specs: {
       status: "BETA",
       engine: "RAG_EXTRACTOR",
@@ -94,6 +102,8 @@ export const PROJECTS: Project[] = [
     title: "CRIS",
     category: "DATA_ENGINEER",
     emoji: "🛡️",
+    github: "https://github.com/dhananjaykr9/CRIS",
+    demo: "https://cris-risk.com",
     specs: {
       status: "EXECUTION_PHASE",
       engine: "SQL_FIRST_FE",
@@ -115,6 +125,8 @@ export const PROJECTS: Project[] = [
     title: "Sales Forecasting Engine",
     category: "ML_ENGINEER",
     emoji: "📈",
+    github: "https://github.com/dhananjaykr9/Sales-Forecasting",
+    demo: "https://forecast-engine.com",
     specs: {
       status: "STABLE",
       engine: "XGBOOST",
@@ -136,6 +148,8 @@ export const PROJECTS: Project[] = [
     title: "PUIP",
     category: "AI_ENGINEER",
     emoji: "🛸",
+    github: "https://github.com/dhananjaykr9/PUIP",
+    demo: "https://puip-intelligence.ai",
     specs: {
       status: "PLANNING",
       engine: "AGENTIC_INSIGHTS",
@@ -157,6 +171,8 @@ export const PROJECTS: Project[] = [
     title: "ProDeploy ML",
     category: "ML_ENGINEER",
     emoji: "🚀",
+    github: "https://github.com/dhananjaykr9/ProDeploy-ML",
+    demo: "https://prodeploy-ml.com",
     specs: {
       status: "STABLE",
       latency: "< 50ms",

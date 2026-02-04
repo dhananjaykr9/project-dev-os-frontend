@@ -12,6 +12,32 @@ export default function RoleFilter() {
     setMounted(true);
   }, []);
 
+  // Use Web Audio API to generate a synthetic 1-second beep
+  const playClick = () => {
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      // System beep style: 'sine' for smooth, 'square' for retro/robotic
+      oscillator.type = "sine"; 
+      oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // 440Hz = A4 note
+      
+      // Volume control
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+      // Fade out at the end of 1 second to avoid a "pop" sound
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 1); // Stops after exactly 1 second
+    } catch (e) {
+      console.log("Audio context failed to start");
+    }
+  };
+
   const roles: { id: SystemRole; label: string }[] = [
     { id: "ALL", label: "Full_Stack" },
     { id: "DATA_ENGINEER", label: "Data_Eng" },
@@ -19,48 +45,50 @@ export default function RoleFilter() {
     { id: "AI_ENGINEER", label: "Gen_AI" },
   ];
 
+  const handleRoleChange = (roleId: SystemRole) => {
+    if (roleId !== activeRole) {
+      playClick();
+      setActiveRole(roleId);
+    }
+  };
+
   return (
-    <div className="w-full max-w-2xl mx-auto px-4">
-      {/* Segmented Controller Container */}
-      <div className="relative flex flex-wrap md:flex-nowrap p-1.5 gap-1 bg-[#080808] border border-white/5 rounded-2xl backdrop-blur-xl shadow-2xl">
+    <div className="w-full max-w-2xl mx-auto px-4 sm:px-6">
+      <div className="relative grid grid-cols-2 md:flex md:flex-nowrap p-1.5 gap-1.5 bg-[#080808] border border-white/5 rounded-2xl md:rounded-full backdrop-blur-xl shadow-2xl">
         {roles.map((role) => {
           const isActive = activeRole === role.id;
           
           return (
             <button
               key={role.id}
-              onClick={() => setActiveRole(role.id)}
-              className={`relative flex-1 group px-4 py-3 transition-all duration-500 rounded-xl outline-none ${
+              onClick={() => handleRoleChange(role.id)}
+              className={`relative flex-1 group px-3 py-3 md:px-4 md:py-3.5 transition-all duration-500 rounded-xl md:rounded-full outline-none ${
                 isActive ? "text-white" : "text-slate-500 hover:text-slate-300"
               }`}
             >
-              {/* Active Pill: Shared layoutId for smooth sliding */}
               <AnimatePresence>
                 {isActive && (
                   <motion.div
                     layoutId="active-segment"
-                    className="absolute inset-0 bg-white/[0.03] border border-white/10 rounded-xl -z-10 shadow-[inset_0_0_10px_rgba(255,255,255,0.02)]"
-                    transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
+                    className="absolute inset-0 bg-white/[0.04] border border-white/10 rounded-xl md:rounded-full -z-10 shadow-[inset_0_0_15px_rgba(255,255,255,0.02)]"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   >
-                    {/* Emerald Bottom Beam */}
                     <motion.div 
                       layoutId="active-beam"
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" 
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" 
                     />
                   </motion.div>
                 )}
               </AnimatePresence>
 
               <div className="relative z-10 flex flex-col items-center gap-1">
-                {/* Technical Index Tag */}
-                <span className={`text-[7px] font-mono uppercase tracking-[0.4em] transition-colors duration-500 ${
+                <span className={`text-[6px] md:text-[7px] font-mono uppercase tracking-[0.3em] md:tracking-[0.4em] transition-colors duration-500 ${
                   isActive ? "text-emerald-500" : "text-slate-700"
                 }`}>
                   SEC_{role.id.substring(0, 3)}
                 </span>
                 
-                {/* Main Label: Magnetic Slide effect on hover */}
-                <span className="text-[10px] md:text-xs font-mono font-bold uppercase tracking-widest whitespace-nowrap group-hover:translate-y-[-1px] transition-transform">
+                <span className="text-[9px] md:text-xs font-mono font-bold uppercase tracking-wider md:tracking-widest whitespace-nowrap">
                   {role.label}
                 </span>
               </div>
@@ -69,16 +97,15 @@ export default function RoleFilter() {
         })}
       </div>
 
-      {/* Environmental Status Display */}
       <div className="mt-6 flex justify-center h-4">
         {mounted && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-3 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10"
+            className="flex items-center gap-2 md:gap-3 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10"
           >
             <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[8px] font-mono text-emerald-500/70 uppercase tracking-[0.2em]">
+            <span className="text-[7px] md:text-[8px] font-mono text-emerald-500/70 uppercase tracking-[0.2em]">
               Uplink_Active: <span className="text-emerald-500">{activeRole}</span>
             </span>
           </motion.div>

@@ -1,7 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Database, Calendar, MapPin, Terminal, Box, Download, Lock, Cpu } from "lucide-react";
+import { 
+  Calendar, 
+  MapPin, 
+  Terminal, 
+  Box, 
+  Download, 
+  Lock, 
+  Cpu 
+} from "lucide-react";
 
 const INTERNSHIPS = [
   {
@@ -33,83 +41,84 @@ const INTERNSHIPS = [
     tech: ["ESP32", "MQTT", "Node-RED", "SQL Server", "Grafana"],
     current: false,
     id: "XP_02",
-    // UPDATED: Correct path to your JPG file
     certificateUrl: "/docs/vnit-internship.jpg" 
   }
 ];
 
 export default function ExperienceRegistry() {
   return (
-    <div className="w-full max-w-5xl mx-auto px-6 py-24 lg:py-32">
+    <div id="experience" className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-32">
       {/* Section Header */}
-      <div className="flex flex-col mb-20">
+      <div className="flex flex-col mb-12 lg:mb-20">
         <div className="flex items-center gap-3 mb-4">
-          <Terminal className="text-emerald-500" size={18} />
-          <span className="text-[10px] font-mono text-emerald-500/80 tracking-[0.5em] uppercase font-bold">
-            System_Logs // Professional_Lifecycle
+          <Terminal className="text-emerald-500 shrink-0" size={16} />
+          <span className="text-[9px] md:text-[10px] font-mono text-emerald-500/80 tracking-[0.2em] md:tracking-[0.5em] uppercase font-bold">
+            System_Logs // Work_History
           </span>
         </div>
-        <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter uppercase">
-          Experience_<span className="text-emerald-500 italic">Registry</span>
+        
+        {/* Responsive Headline Fix: Dynamic sizing to prevent 'Registry' from dropping poorly */}
+        <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl font-black text-white tracking-tight md:tracking-tighter uppercase leading-none">
+          Experience_
+          <span className="text-emerald-500 italic inline-block sm:inline">Registry</span>
         </h2>
       </div>
 
-      <div className="relative space-y-20 border-l border-white/5 ml-4 pl-10 md:pl-16">
+      {/* Vertical Timeline: Minimal margin-left on mobile (ml-1) to recover content space */}
+      <div className="relative space-y-12 lg:space-y-20 border-l border-white/10 ml-1 sm:ml-4 pl-5 sm:pl-10 md:pl-16">
         {INTERNSHIPS.map((job, idx) => (
           <motion.div 
             key={job.id}
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 10 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: idx * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ delay: idx * 0.1, duration: 0.8 }}
             className="group relative"
           >
-            {/* Connection Node */}
-            <div className={`absolute -left-[51px] md:-left-[77px] top-2 w-5 h-5 rounded-full border-[3px] border-[#050505] z-10 transition-all duration-700 ${
+            {/* Connection Node: Scaled and repositioned for mobile recovery */}
+            <div className={`absolute -left-[25px] sm:-left-[45px] md:-left-[77px] top-2 w-4 h-4 md:w-5 md:h-5 rounded-full border-[2px] md:border-[3px] border-[#050505] z-10 transition-colors duration-500 ${
               job.current 
-              ? 'bg-emerald-500 shadow-[0_0_20px_#10b981]' 
+              ? 'bg-emerald-500 shadow-[0_0_15px_#10b981]' 
               : 'bg-slate-800 border-slate-900 group-hover:bg-slate-700'
             }`} />
 
-            {/* Content Card */}
-            <div className="relative bg-[#0A0A0A] border border-white/5 rounded-[2.5rem] p-8 md:p-12 transition-all duration-500 hover:border-emerald-500/20 hover:bg-[#0C0C0C] group-hover:shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+            {/* Card Body: Fluid padding to ensure text doesn't compress */}
+            <div className="relative bg-[#0A0A0A] border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] p-5 sm:p-8 md:p-12 overflow-hidden shadow-xl transition-all duration-500 hover:border-emerald-500/20">
               
-              <span className="absolute -top-4 -right-4 font-mono text-[100px] font-black text-white/[0.01] select-none group-hover:text-emerald-500/[0.02] transition-colors duration-700">
-                {job.id}
-              </span>
-
               <div className="relative z-10">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-12">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
                   <div className="space-y-3">
-                    <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-lg ${job.current ? 'bg-emerald-500/10 text-emerald-500' : 'bg-white/5 text-slate-500'}`}>
-                        {job.current ? <Cpu size={20} /> : <Box size={20} />}
+                    <div className="flex items-start gap-3">
+                      <div className={`p-2 rounded-lg shrink-0 mt-1 ${job.current ? 'bg-emerald-500/10 text-emerald-500' : 'bg-white/5 text-slate-500'}`}>
+                        {job.current ? <Cpu size={16} /> : <Box size={16} />}
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors duration-300">
+                      {/* Responsive Role Title */}
+                      <h3 className="text-base sm:text-2xl md:text-4xl font-bold text-white tracking-tight leading-snug break-words">
                         {job.role}
                       </h3>
                     </div>
-                    <p className="text-emerald-500/80 font-mono text-xs tracking-[0.3em] uppercase font-semibold pl-12">
+                    <p className="text-emerald-500/80 font-mono text-[9px] sm:text-xs tracking-[0.2em] uppercase font-semibold pl-9 sm:pl-12">
                       {job.company}
                     </p>
                   </div>
                   
-                  <div className="flex flex-wrap gap-4 font-mono text-[9px] tracking-widest uppercase lg:flex-col lg:items-end">
-                    <span className="flex items-center gap-2 bg-white/5 px-4 py-1.5 rounded-full border border-white/10 text-slate-200">
-                      <Calendar size={12} className="text-emerald-500"/> {job.duration}
+                  {/* Metadata Badges: Wrap naturally on small screens */}
+                  <div className="flex flex-wrap gap-2 sm:gap-3 font-mono text-[8px] md:text-[9px] tracking-widest uppercase lg:flex-col lg:items-end">
+                    <span className="flex items-center gap-2 bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-slate-200">
+                      <Calendar size={10} className="text-emerald-500 shrink-0"/> {job.duration}
                     </span>
-                    <span className="flex items-center gap-2 px-4 py-1.5 text-slate-500">
-                      <MapPin size={12}/> {job.location}
+                    <span className="flex items-center gap-2 px-2.5 py-1 text-slate-500">
+                      <MapPin size={10} className="shrink-0"/> {job.location}
                     </span>
                   </div>
                 </div>
 
                 {/* Detail Logs */}
-                <div className="space-y-6 mb-12 max-w-3xl">
+                <div className="space-y-4 md:space-y-6 mb-8 max-w-3xl">
                   {job.details.map((detail, i) => (
-                    <div key={i} className="group/item flex items-start gap-5">
-                      <div className="mt-2.5 w-2 h-[1px] bg-emerald-500/40 group-hover/item:bg-emerald-500 group-hover/item:w-4 transition-all duration-300" />
-                      <p className="text-slate-400 text-sm md:text-base leading-relaxed font-light group-hover/item:text-slate-200 transition-colors">
+                    <div key={i} className="group/item flex items-start gap-3 sm:gap-5">
+                      <div className="mt-1.5 w-1.5 h-[1px] bg-emerald-500/40 group-hover/item:bg-emerald-500 transition-all duration-300 shrink-0" />
+                      <p className="text-slate-400 text-[10px] sm:text-xs md:text-base leading-relaxed font-light group-hover:text-slate-200 transition-colors">
                         {detail}
                       </p>
                     </div>
@@ -117,10 +126,10 @@ export default function ExperienceRegistry() {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-8 pt-8 border-t border-white/5">
-                  <div className="flex flex-wrap gap-2.5">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 pt-6 border-t border-white/5">
+                  <div className="flex flex-wrap gap-2">
                     {job.tech.map(t => (
-                      <span key={t} className="px-4 py-2 bg-white/[0.02] rounded-xl border border-white/5 text-[10px] font-mono text-slate-400 uppercase tracking-widest hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all duration-300 cursor-default">
+                      <span key={t} className="px-2 py-0.5 bg-white/[0.02] rounded border border-white/5 text-[8px] md:text-[10px] font-mono text-slate-400 uppercase tracking-tight">
                         {t}
                       </span>
                     ))}
@@ -128,19 +137,18 @@ export default function ExperienceRegistry() {
 
                   {job.certificateUrl ? (
                     <motion.a 
-                      whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       href={job.certificateUrl} 
                       download 
-                      className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-emerald-500 text-black font-black text-[11px] tracking-[0.2em] uppercase rounded-2xl transition-all duration-300 hover:bg-white"
+                      className="flex items-center justify-center gap-3 px-6 py-3 bg-emerald-500 text-black font-black text-[9px] md:text-[11px] tracking-[0.1em] uppercase rounded-xl hover:bg-white transition-colors duration-300"
                     >
-                      <Download size={16} strokeWidth={3} />
-                      Download_Credential
+                      <Download size={14} />
+                      Credential
                     </motion.a>
                   ) : (
-                    <div className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-white/[0.02] text-slate-600 font-mono text-[11px] tracking-[0.2em] uppercase rounded-2xl border border-white/5 cursor-not-allowed">
-                      <Lock size={14} />
-                      Session_Active
+                    <div className="flex items-center justify-center gap-3 px-6 py-3 bg-white/[0.02] text-slate-600 font-mono text-[9px] uppercase rounded-xl border border-white/5 cursor-not-allowed">
+                      <Lock size={12} />
+                      Active_Session
                     </div>
                   )}
                 </div>
