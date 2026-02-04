@@ -15,7 +15,7 @@ export default function PipelineNav() {
   const [mounted, setMounted] = useState(false);
   const [activeStage, setActiveStage] = useState("hero");
   const { scrollYProgress } = useScroll();
-  const prevStageRef = useRef("hero"); // Ref to track actual changes
+  const prevStageRef = useRef("hero"); 
   
   const scaleY = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
   const movingDotY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
@@ -23,14 +23,20 @@ export default function PipelineNav() {
 
   const [percent, setPercent] = useState(0);
 
-  // 1. Improved Audio Context Handler
+  // 1. SAFE Audio Context Handler for Vercel Builds
   const playSectionBeep = () => {
+    // FIX: Check if window is defined before accessing AudioContext
+    if (typeof window === "undefined") return;
+
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      const audioCtx = new AudioCtx();
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const audioCtx = new AudioContextClass();
       
-      // Browser safety: Resume context if suspended
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
 
       const oscillator = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
@@ -47,13 +53,12 @@ export default function PipelineNav() {
       oscillator.start();
       oscillator.stop(audioCtx.currentTime + 0.08);
     } catch (e) {
-      // Silently fail if browser blocks audio
+      // Ignore errors if browser blocks autoplay
     }
   };
 
   const packets = useMemo(() => Array.from({ length: 3 }), []);
 
-  // 2. Controlled Sound Trigger
   useEffect(() => {
     if (mounted && activeStage !== prevStageRef.current) {
       playSectionBeep();
@@ -65,7 +70,7 @@ export default function PipelineNav() {
     setMounted(true);
     const observerOptions = {
       root: null,
-      rootMargin: "-48% 0px -48% 0px", // Tightened margin for precise center detection
+      rootMargin: "-48% 0px -48% 0px", 
       threshold: 0, 
     };
 
@@ -139,7 +144,6 @@ export default function PipelineNav() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
             onClick={() => {
-              // Clicking also triggers the beep naturally through state update
               document.getElementById(stage.id)?.scrollIntoView({ behavior: "smooth" });
             }}
             className="group relative flex items-center gap-8 outline-none text-left"
