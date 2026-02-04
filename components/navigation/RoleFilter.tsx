@@ -12,29 +12,32 @@ export default function RoleFilter() {
     setMounted(true);
   }, []);
 
-  // Use Web Audio API to generate a synthetic 1-second beep
+  // Use Web Audio API with SSR Safety guard
   const playClick = () => {
+    // FIX: Guard for Vercel Build (Server-side rendering)
+    if (typeof window === "undefined") return;
+
     try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const audioCtx = new AudioContextClass();
       const oscillator = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
 
       oscillator.connect(gainNode);
       gainNode.connect(audioCtx.destination);
 
-      // System beep style: 'sine' for smooth, 'square' for retro/robotic
       oscillator.type = "sine"; 
-      oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // 440Hz = A4 note
+      oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); 
       
-      // Volume control
       gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-      // Fade out at the end of 1 second to avoid a "pop" sound
       gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
 
       oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 1); // Stops after exactly 1 second
+      oscillator.stop(audioCtx.currentTime + 1);
     } catch (e) {
-      console.log("Audio context failed to start");
+      // Audio context might be blocked by browser until user interaction
     }
   };
 
