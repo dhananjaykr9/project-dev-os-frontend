@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Terminal, CheckCircle2, Loader2, Code2, Linkedin, Github, Instagram, MessageCircle, Activity } from "lucide-react";
+import { Send, Terminal, CheckCircle2, Loader2, Code2, Linkedin, Github, Instagram, Activity } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function JsonContact() {
@@ -22,7 +22,6 @@ export default function JsonContact() {
     { icon: <Linkedin size={14} />, label: "LINKEDIN", href: "https://linkedin.com/in/dhananjaykharkar", color: "hover:text-blue-400" },
     { icon: <Github size={14} />, label: "GITHUB", href: "https://github.com/dhananjaykr9", color: "hover:text-slate-200" },
     { icon: <Instagram size={14} />, label: "INSTAGRAM", href: "https://instagram.com/dhanno.9", color: "hover:text-pink-400" },
-    { icon: <MessageCircle size={14} />, label: "WHATSAPP", href: "https://wa.me/919595167618", color: "hover:text-emerald-400" },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -18,7 +18,7 @@ export default function SystemFooter() {
         hour: "2-digit", minute: "2-digit", second: "2-digit",
         hour12: false,
       }).format(now));
-      
+
       // Simulate real-time data throughput
       setBitrate((Math.random() * (4.5 - 1.2) + 1.2).toFixed(1));
     }, 1000);
@@ -43,14 +43,14 @@ export default function SystemFooter() {
     <footer className="w-full border-t border-white/5 bg-[#050505] py-16 px-6 relative overflow-hidden font-mono">
       {/* Background Cyber-Grid */}
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
-      
+
       {/* Top Laser Line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[1px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
 
       <div className="max-w-7xl mx-auto flex flex-col gap-16">
         {/* Main Telemetry Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-          
+
           {/* Node Location & Time */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-slate-500">
@@ -92,10 +92,10 @@ export default function SystemFooter() {
             </div>
             <div className="space-y-3 pt-1">
               <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden flex">
-                <motion.div 
+                <motion.div
                   animate={{ width: ["15%", "55%", "35%"] }}
                   transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                  className="h-full bg-emerald-500 shadow-[0_0_10px_#10b981]" 
+                  className="h-full bg-emerald-500 shadow-[0_0_10px_#10b981]"
                 />
               </div>
               <div className="flex justify-between text-[7px] text-slate-700 uppercase tracking-tighter font-bold">
@@ -113,10 +113,10 @@ export default function SystemFooter() {
             </div>
             <div className="space-y-1">
               <p className="text-2xl font-black text-white tracking-tighter">
-                v2.0.26_<span className="text-emerald-500">RC</span>
+                <span className="text-emerald-500">LIVE</span>
               </p>
               <p className="text-[8px] text-slate-600 uppercase tracking-widest flex items-center gap-2">
-                <Zap size={10} className="fill-emerald-500 text-emerald-500" /> PROD_READY // CLOUD_SYNCED
+                <Zap size={10} className="fill-emerald-500 text-emerald-500" /> SYSTEM_ONLINE // SECURE
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function SystemFooter() {
         <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-8">
           <div className="space-y-2 text-center md:text-left">
             <p className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase">
-              &copy; 2026 DHANANJAY KHARKAR <span className="mx-2 opacity-20">|</span> 
+              &copy; 2026 DHANANJAY KHARKAR <span className="mx-2 opacity-20">|</span>
               <span className="text-emerald-500/50">Protocol_Level_03</span>
             </p>
             <p className="text-[8px] text-slate-700 tracking-[0.3em] uppercase flex items-center justify-center md:justify-start gap-2">

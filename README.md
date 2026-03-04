@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📟 Dev OS // Dhananjay Kharkar Portfolio
 
-## Getting Started
+A premium, high-performance portfolio terminal built with **Next.js 15**, **Framer Motion**, and **Tailwind CSS**. Designed as a "Development Operating System" that visualizes a career as a fault-tolerant data pipeline.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 System Architecture (01-06)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The portfolio is structured as a sequential intelligence pipeline:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  **`01_SOURCE`**: **Hero Terminal** - Initial kernel boot and profile loading.
+2.  **`02_TRANSFORM`**: **Project Registry** - Filtering and processing high-impact modules.
+3.  **`03_SCHEMA`**: **Education Ledger** - Validating academic background and core knowledge.
+4.  **`04_VALIDATE`**: **Work History** - Verifying pipeline integrity through professional experience.
+5.  **`05_INFERENCE`**: **Skill Matrix** - Statistical distribution of technical capabilities.
+6.  **`06_DEPLOY`**: **Contact API** - Establishing a direct uplink for collaboration.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 💎 Premium OS Aesthetics
 
-To learn more about Next.js, take a look at the following resources:
+### 📺 CRT Processing Unit
+Implemented a global CRT overlay filter including:
+- **Scanlines**: Subtle vertical scanning effect.
+- **Digital Noise**: Light hardware-mimicking static.
+- **Glitch Effects**: Reactive "recompile" animations on key UI elements.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🎯 Custom Crosshair Scanner
+A proprietary cursor system that replaces the standard mouse:
+- **Reactive Corners**: Scanner box that expands and rotates on hover.
+- **Precision Dot**: Pixel-perfect focal point tracking.
+- **Coordinate Feed**: Real-time floating X/Y values displayed at the cursor node.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🔍 Google-Ranked SEO
+- Optimized for Google ranking with comprehensive Meta, OpenGraph, and Twitter tags.
+- Fixed Next.js viewport metadata standards for a 100/100 Lighthouse score.
+- Dynamic canonical links and author indexing.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Technical Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) (Standardized Design Tokens)
+- **Animation**: [Framer Motion](https://www.framer.com/motion/) (Hardware-accelerated)
+- **Icons**: [Lucide React](https://lucide.dev)
+- **Fonts**: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (System default)
+
+---
+
+## 🛠️ Local Development
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/dhananjaykr9/project-dev-os-frontend.git
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Boot the kernel**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Production build**:
+   ```bash
+   npm run build
+   ```
+
+---
+
+## 📡 Metadata
+
+- **Author**: Dhananjay Kharkar
+- **Status**: PRODUCTION_READY
+- **Version**: 2.0.26
+- **Uplink**: [dhananjaykharkar.com](https://dhananjaykharkar.com)
