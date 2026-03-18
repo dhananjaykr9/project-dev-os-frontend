@@ -3,14 +3,24 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
     const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+    const isDev = process.env.NODE_ENV === "development";
+
+    // In development, Next.js/Turbopack requires unsafe-inline and unsafe-eval
+    // for HMR, hot reload scripts, and hydration bootstrapping.
+    // In production, you can tighten this once nonce is threaded into layout.tsx.
+    const scriptSrc = isDev
+        ? `script-src 'self' 'unsafe-inline' 'unsafe-eval'`
+        : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`;
 
     const cspHeader = [
         `default-src 'self'`,
-        `script-src 'self' 'nonce-${nonce}'`,
+        scriptSrc,
         `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-        `font-src 'self' https://fonts.gstatic.com`,
+        `font-src 'self' data: https://fonts.gstatic.com`,
         `img-src 'self' data: https: blob:`,
-        `connect-src 'self' https://api.web3forms.com https://vitals.vercel-insights.com`,
+        `media-src 'self' blob:`,
+        `connect-src 'self' https://api.web3forms.com https://vitals.vercel-insights.com ws://localhost:* wss://localhost:*`,
+        `worker-src 'self' blob:`,
         `frame-ancestors 'none'`,
     ].join("; ");
 
