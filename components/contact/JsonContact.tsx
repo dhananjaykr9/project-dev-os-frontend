@@ -90,7 +90,7 @@ export default function JsonContact() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 md:p-10 font-mono relative">
+          <form onSubmit={handleSubmit} className="p-6 md:p-10 font-mono relative" suppressHydrationWarning>
             <div className="grid grid-cols-[30px_1fr] md:grid-cols-[40px_1fr] gap-4 md:gap-8">
               {/* Line Numbers - Smaller for mobile */}
               <div className="flex flex-col text-slate-700 text-[9px] md:text-[10px] leading-[2.5rem] md:leading-[3rem] select-none text-right border-r border-white/5 pr-4 md:pr-6">
@@ -109,6 +109,7 @@ export default function JsonContact() {
                     placeholder="&quot;Name&quot;"
                     className="bg-transparent border-none outline-none text-white placeholder:text-slate-800 flex-grow min-w-[100px]"
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -120,6 +121,7 @@ export default function JsonContact() {
                     placeholder="&quot;email@node.com&quot;"
                     className="bg-transparent border-none outline-none text-white placeholder:text-slate-800 flex-grow min-w-[100px]"
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -131,6 +133,7 @@ export default function JsonContact() {
                     rows={4}
                     className="bg-transparent border-none outline-none text-white placeholder:text-slate-800 flex-grow min-w-[120px] resize-none pt-3 md:pt-4"
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -156,6 +159,7 @@ export default function JsonContact() {
                 whileTap={{ scale: 0.98 }}
                 className={`w-full md:w-auto px-6 md:px-10 py-4 md:py-5 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase transition-all duration-500 flex items-center justify-center gap-3 ${isSent ? "bg-emerald-500 text-black" : "bg-white text-black hover:bg-emerald-400"
                   }`}
+                suppressHydrationWarning
               >
                 <AnimatePresence mode="wait">
                   {isSubmitting ? (

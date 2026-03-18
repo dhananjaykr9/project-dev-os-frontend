@@ -56,7 +56,7 @@ export default function RoleFilter() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 sm:px-6">
+    <div className="w-full max-w-2xl mx-auto px-4 sm:px-6" suppressHydrationWarning>
       <div className="relative grid grid-cols-2 md:flex md:flex-nowrap p-1.5 gap-1.5 bg-[#080808] border border-white/5 rounded-2xl md:rounded-full backdrop-blur-xl shadow-2xl">
         {roles.map((role) => {
           const isActive = activeRole === role.id;
@@ -68,6 +68,7 @@ export default function RoleFilter() {
               className={`relative flex-1 group px-3 py-3 md:px-4 md:py-3.5 transition-all duration-500 rounded-xl md:rounded-full outline-none ${
                 isActive ? "text-white" : "text-slate-500 hover:text-slate-300"
               }`}
+              suppressHydrationWarning
             >
               <AnimatePresence>
                 {isActive && (

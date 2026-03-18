@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -6,10 +7,17 @@ const securityHeaders = [
   { key: "X-XSS-Protection", value: "1; mode=block" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-  // CSP is handled dynamically in middleware.ts using nonces (no unsafe-inline)
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.join(__dirname),
+  // Fix Turbopack resolving tailwindcss from the wrong parent directory.
+  // This explicitly points Turbopack to frontend/node_modules/tailwindcss.
+  turbopack: {
+    resolveAlias: {
+      tailwindcss: path.join(__dirname, "node_modules/tailwindcss"),
+    },
+  },
   async headers() {
     return [
       {

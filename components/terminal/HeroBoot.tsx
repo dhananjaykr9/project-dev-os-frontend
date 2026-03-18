@@ -126,7 +126,7 @@ export default function HeroBoot() {
             <span className="relative block w-2 h-2 rounded-full bg-emerald-500" />
           </div>
           <span className="font-mono text-[8px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.5em] text-emerald-500/90 font-bold">
-            01_SOURCE // SYSTEM_STATUS // INFERENCE_READY
+            01_SOURCE // DATA_ENG + AI_ML // PIPELINE_READY
           </span>
         </motion.div>
 
@@ -153,8 +153,8 @@ export default function HeroBoot() {
             transition={{ delay: 0.6 }}
             className="text-slate-400 text-xs sm:text-sm md:text-xl font-light max-w-2xl mx-auto leading-relaxed tracking-wide mt-6 md:mt-8 px-2"
           >
-            Forging <span className="text-white font-medium border-b border-emerald-500/30">Fault-Tolerant Pipelines</span> and
-            architecting machine intelligence for the next-gen web.
+            Building <span className="text-white font-medium border-b border-emerald-500/30">Data Engineering Pipelines</span> &amp;
+            architecting <span className="text-white font-medium border-b border-violet-500/30">Machine Intelligence</span> for the next-gen web.
           </motion.p>
         </div>
 
@@ -192,7 +192,7 @@ export default function HeroBoot() {
             </div>
             <div className="space-y-1 md:space-y-3">
               <p className="text-slate-600 text-[7px] md:text-[8px] uppercase">Sector</p>
-              <p className="text-white font-bold">DATA & ML</p>
+              <p className="text-white font-bold">DATA / AI / ML</p>
             </div>
           </div>
 

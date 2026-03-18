@@ -23,7 +23,7 @@ export default function SkillMatrix() {
     {
       title: "DATA_ENG",
       icon: <Database size={18} />,
-      skills: ["SQL Server", "SSMS", "ETL Pipelines", "Star Schema"],
+      skills: ["SQL Server", "ETL Pipelines", "Grafana", "Node-RED"],
       accent: "from-emerald-500/20",
       glow: "group-hover:shadow-[0_0_50px_rgba(16,185,129,0.15)]"
     },
