@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
         `font-src 'self' data: https://fonts.gstatic.com`,
         `img-src 'self' data: https: blob:`,
         `media-src 'self' blob:`,
-        `connect-src 'self' https://api.web3forms.com https://vitals.vercel-insights.com ws://localhost:* wss://localhost:*`,
+        `connect-src 'self' https://api.web3forms.com https://vitals.vercel-insights.com${isDev ? " ws://localhost:* wss://localhost:*" : ""}`,
         `worker-src 'self' blob:`,
         `frame-ancestors 'none'`,
     ].join("; ");

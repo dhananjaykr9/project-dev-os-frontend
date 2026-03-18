@@ -10,14 +10,13 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Anchors file tracing to frontend/ — needed because the project
+  // lives in a subdirectory of the repository root.
   outputFileTracingRoot: path.join(__dirname),
-  // Fix Turbopack resolving tailwindcss from the wrong parent directory.
-  // This explicitly points Turbopack to frontend/node_modules/tailwindcss.
-  turbopack: {
-    resolveAlias: {
-      tailwindcss: path.join(__dirname, "node_modules/tailwindcss"),
-    },
-  },
+
+  // Disable source maps in production for security
+  productionBrowserSourceMaps: false,
+
   async headers() {
     return [
       {
