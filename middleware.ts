@@ -5,12 +5,13 @@ export function middleware(request: NextRequest) {
     const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
     const isDev = process.env.NODE_ENV === "development";
 
-    // In development, Next.js/Turbopack requires unsafe-inline and unsafe-eval
-    // for HMR, hot reload scripts, and hydration bootstrapping.
-    // In production, you can tighten this once nonce is threaded into layout.tsx.
+    // Next.js injects its own inline bootstrap/hydration scripts which cannot
+    // receive a nonce unless you thread it through layout.tsx (complex).
+    // unsafe-inline is the practical solution for a portfolio site; the other
+    // directives (default-src self, frame-ancestors none, etc.) still protect.
     const scriptSrc = isDev
         ? `script-src 'self' 'unsafe-inline' 'unsafe-eval'`
-        : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`;
+        : `script-src 'self' 'unsafe-inline'`;
 
     const cspHeader = [
         `default-src 'self'`,
